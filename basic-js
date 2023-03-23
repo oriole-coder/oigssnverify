@@ -1,0 +1,22 @@
+const puppeteer = require('puppeteer');
+
+
+(async () => {
+  const browser = await puppeteer.launch({headless:false});
+  const page = await browser.newPage();
+  await page.goto('https://exclusions.oig.hhs.gov/');
+
+  await page.type('#ctl00_cpExclusions_txtSPLastName', 'Word')
+  await page.type('#ctl00_cpExclusions_txtSPFirstName', 'James')
+
+  await Promise.all([
+    page.waitForNavigation(), 
+    page.click('#ctl00_cpExclusions_ibSearchSP') 
+  ]);
+  await Promise.all([
+    page.waitForNavigation(),
+    page.click('#ctl00_cpExclusions_gvEmployees_ctl02_cmdVerify2')
+  ])
+  
+  await page.type('#ctl00_cpExclusions_txtSSN', '111223333')
+   page.click('#ctl00_cpExclusions_ibtnVerify')
